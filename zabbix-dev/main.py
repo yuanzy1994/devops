@@ -7,6 +7,10 @@ import sys
 
 
 class ZabbixAPI:
+    G_list = []
+    GID_list = []
+    G_dic = {}
+    GID = None
 
     def __init__(self):
         self.url = 'http://172.16.80.130:8888/api_jsonrpc.php'
@@ -82,13 +86,13 @@ class ZabbixAPI:
             response = json.loads(result.read())
             print response['result']
             result.close()
-        print "Number Of Hosts:", len(response['result'])
+        #print "Number Of Hosts:", len(response['result'])
         for host in response['result']:
             print "Host ID:", host['hostid'], "Host Name:", host['host']
 
         print "______________________________"
 
-    def hostgroup_get(self, groupName=''):
+    def hostgroup_get(self):
         data = json.dumps(
             {
                 "jsonrpc": "2.0",
@@ -96,7 +100,7 @@ class ZabbixAPI:
                 "params": {
                     "output": "extend",
                     "filter": {
-                        "name": groupName,
+                        "name": sys.argv[3],
                     }
                 },
                 "auth": self.user_login(),
@@ -117,25 +121,23 @@ class ZabbixAPI:
             response = json.loads(result.read())
 #            print response
             result.close()
-        print "Number Of Group:", len(response['result'])
-        self.G_list = []
+        #print "Number Of Group:", len(response['result'])
 #        print type(G_list)
         try:
             for group in response['result']:
-                # print "Group ID:", group['groupid'], "Group Name:",
-                # group['name']
-                print group['name']
 
-                N = group['name']
-                f = N.encode('utf-8')
-#                print type(f)
-                self.G_list.append(f)
-#                print "G_list:", G
+        #        print "Group ID:", group['groupid'], "Group Name:",group['name']
+                self.G_dic[group['name'].encode('utf-8')] = int(group['groupid'].encode('utf-8'))
+                self.GID_list.append(group['groupid'].encode('utf-8'))
+                self.G_list.append(group['name'].encode('utf-8'))
+                self.GID=int(group['groupid'].encode('utf-8'))
         except AttributeError as e:
             print "ERROR:", e.message
-        print "G_list:", self.G_list
+#        print "G_list:", self.G_list
+#        print "Gid_list",self.GID_list
 
-        print "_____________________________________"
+        return self.GID
+
 
     def template_get(self, templateName=''):
         data = json.dumps(
@@ -158,24 +160,54 @@ class ZabbixAPI:
             request.add_header(key, self.header[key])
         result = urllib2.urlopen(request)
         response = json.loads(result.read())
-#        print response
+        print response
         result.close()
         print "Module_List:"
         for temp in response['result']:
-            print temp['name']
+            print temp['name'], temp['templateid']
 
         print "_______________________________"
 
-    def create_group(self, groupName):
+    def create_group(self,groupName=sys.argv[3]):
+        self.hostgroup_get()
+#        print self.G_list
         if groupName in self.G_list:
-            print "EXIST!"
-            sys.exit(1)
+#           sys.exit(1)
+            return self.hostgroup_get()
+        else:
+            data = json.dumps(
+                {
+                    "jsonrpc": "2.0",
+                    "method": "hostgroup.create",
+                    "params": {
+                        "name": groupName
+                    },
+                    "auth": self.user_login(),
+                    "id": 1
+                }
+            )
+
+            request = urllib2.Request(self.url, data)
+
+            for key in self.header:
+                request.add_header(key, self.header[key])
+
+            result = urllib2.urlopen(request)
+            response = json.loads(result.read())
+            return self.hostgroup_get()
+    #        print "hello:", response
+
+    def graph_get(self, hostID):
+        self.graphid = []
+        self.name = []
         data = json.dumps(
             {
                 "jsonrpc": "2.0",
-                "method": "hostgroup.create",
+                "method": "graph.get",
                 "params": {
-                    "name": groupName
+                    "output": "extend",
+                    "hostids": hostID,
+                    "sortfield": "name"
                 },
                 "auth": self.user_login(),
                 "id": 1
@@ -183,22 +215,76 @@ class ZabbixAPI:
         )
 
         request = urllib2.Request(self.url, data)
-
         for key in self.header:
             request.add_header(key, self.header[key])
-
         result = urllib2.urlopen(request)
         response = json.loads(result.read())
+        result.close()
+
+#        print response
+        for graph in response['result']:
+            print graph['graphid']
+            print graph['name']
+            self.graphid.append(graph['graphid'].encode('utf-8'))
+            self.name.append(graph['name'].encode('utf-8'))
+
+    def host_create(self):
+        data = json.dumps(
+            {
+                "jsonrpc": "2.0",
+                "method": "host.create",
+                "params": {
+                    "host": sys.argv[1],
+                    "interfaces": [
+                        {
+                            "type": 1,
+                            "main": 1,
+                            "useip": 1,
+                            "ip": sys.argv[2],
+                            "dns": "",
+                            "port": "10050"
+                        }
+                    ],
+                    "groups": [
+                        {
+                            "groupid": self.create_group(sys.argv[3])
+                        }
+                    ],
+                    "templates": [
+                        {
+                            "templateid": "10001"
+                        }
+                    ],
+                    "inventory_mode": 0,
+                    "inventory": {
+                        "macaddress_a": None,
+                        "macaddress_b": None,
+                    }
+                },
+                "auth": self.user_login(),
+                "id": 1
+            }
+        )
+
+        request = urllib2.Request(self.url, data)
+        for key in self.header:
+            request.add_header(key, self.header[key])
+        result = urllib2.urlopen(request)
+        response = json.loads(result.read())
+        result.close()
         print response
-
-
-
-
+        print "host create success!"
+#        print self.create_group(sys.argv[3])
 
 
 a = ZabbixAPI()
 a.user_login()
-a.hosts_get()
-a.hostgroup_get()
-a.template_get()
-a.create_group('Tes Servers')
+# a.hosts_get()
+#a.hostgroup_get()
+#a.template_get()
+#a.create_group('Dev Server')
+#
+# a.host_create('jenkins', '192.168.2.108')
+# a.host_create('dev-basic', '192.168.2.38')
+# a.host_create('dev-nginx', '172.16.80.20')
+a.host_create()
