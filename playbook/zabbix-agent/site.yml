@@ -1,0 +1,9 @@
+---
+#this is playbook deploys the zabbix agent in a cluster.
+
+- name: Install zabbix agent
+  hosts: all
+  remote_user: yuanzy
+
+  roles:
+      - common

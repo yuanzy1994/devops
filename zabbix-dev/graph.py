@@ -75,10 +75,24 @@ class ZabbixAPI:
         # print self.hostid
         # print self.hostname
 
-    def graph_download(self, hostID):
+    def graph_get(self, hostID):
+        self.graphid = []
+        self.name = []
+        data = json.dumps(
+            {
+                "jsonrpc": "2.0",
+                "method": "graph.get",
+                "params": {
+                    "output": "extend",
+                    "hostids": hostID,
+                    "sortfield": "name"
+                },
+                "auth": self.user_login(),
+                "id": 1
+            }
+        )
 
         request = urllib2.Request(self.url, data)
-        url = self.urlOpener.open(request)
         for key in self.header:
             request.add_header(key, self.header[key])
         result = urllib2.urlopen(request)

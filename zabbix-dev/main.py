@@ -80,7 +80,7 @@ class ZabbixAPI:
                 print "Error code:", e.message
         else:
             response = json.loads(result.read())
-#            print response['result']
+            print response['result']
             result.close()
         print "Number Of Hosts:", len(response['result'])
         for host in response['result']:
@@ -186,10 +186,14 @@ class ZabbixAPI:
 
         for key in self.header:
             request.add_header(key, self.header[key])
-        try:
+
         result = urllib2.urlopen(request)
         response = json.loads(result.read())
         print response
+
+
+
+
 
 
 a = ZabbixAPI()
