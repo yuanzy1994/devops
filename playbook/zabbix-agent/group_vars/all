@@ -1,8 +1,0 @@
----
-# Variables listed here are applicable to all host groups
-
-Server: 172.16.80.130
-ListenPort: 10050
-ListenIP: 0.0.0.0
-ServerActive: 172.16.80.130
-
