@@ -26,3 +26,7 @@ from django.shortcuts import render_to_response
 def current_datetime(request):
     now = datetime.datetime.now()
     return render_to_response('current_datetime.html',{'current_date': now})
+
+
+def test(request):
+    return HttpResponse("OK")

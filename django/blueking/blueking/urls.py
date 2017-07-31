@@ -15,13 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-]
-
 from bk_dev.views import current_datetime
+from bk_dev.views import test
+
 
 urlpatterns = [
-    url(r'^time/$', current_datetime),
+    url(r'^test/',test),
+    url(r'^time/', current_datetime),
+    url(r'^admin/', admin.site.urls),
 ]
