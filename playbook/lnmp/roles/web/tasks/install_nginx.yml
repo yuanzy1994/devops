@@ -21,5 +21,5 @@
 
 
 - name: php test page
-  copy: src=info.php dest=/usr/share/nginx/html/info.php
+  copy: src=info.php dest=/usr/share/nginx/html/index.php
 
