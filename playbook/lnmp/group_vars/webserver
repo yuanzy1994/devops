@@ -1,0 +1,7 @@
+php_listen: 127.0.0.1:9000
+php_listen_owner: nobody
+php_listen_group: nobody
+php_user: nginx
+php_group: nginx
+nginx_listen_port: 80
+nginx_server_name: localhost

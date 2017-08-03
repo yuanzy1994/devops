@@ -1,0 +1,12 @@
+---
+
+- name: install mysql
+  yum: name=mysql-server state=present
+
+- name: configure for mysql
+  copy: src=my.cnf dest=/etc/my.cnf.d/my.cnf owner=mysql
+
+- name: mkdir for mysql
+  file: path=/var/log/mysql state=directory owner=mysql group=mysql
+  notify:
+    - restart mysql

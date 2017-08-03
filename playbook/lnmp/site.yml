@@ -1,0 +1,25 @@
+---
+# main site
+
+- hosts: all
+  remote_user: yuanzy
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+
+
+
+- hosts: webserver
+  remote_user: yuanzy
+  become: yes
+  become_method: sudo
+  roles:
+    - web
+
+- hosts: dbserver
+  remote_user: yuanzy
+  become: yes
+  become_method: sudo
+  roles:
+    - db

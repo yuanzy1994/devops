@@ -1,0 +1,12 @@
+---
+#common configure
+
+- name: stop firewalld
+  service: name=firewalld state=stopped enabled=no
+
+- name: disable selinux
+  template: src=se_config.j2 dest=/etc/selinux/config
+
+- name: install epel
+  yum: name=epel-release state=present
+

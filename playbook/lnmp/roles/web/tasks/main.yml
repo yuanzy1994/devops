@@ -1,0 +1,6 @@
+---
+#deploy web server
+
+- include: install_php.yml
+- include: install_nginx.yml
+

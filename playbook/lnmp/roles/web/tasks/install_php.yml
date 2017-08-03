@@ -1,0 +1,16 @@
+---
+
+- name: Install php
+  yum: name={{ item }} state=present
+  with_items:
+    - php
+    - php-mysql
+    - php-fpm
+
+- name: off cgi.fix_pathinfo
+  copy: src=php.ini dest=/etc/php.ini
+
+- name: create www.conf
+  template: src=www.conf.j2 dest=/etc/php-fpm.d/www.conf
+  notify:
+    - restart php-fpm
