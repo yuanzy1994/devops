@@ -1,0 +1,13 @@
+目录结构：
+    Project_name:
+        project_name  #配置文件
+        manage.py
+        app01
+        app02
+
+
+#创建Django程序
+   django-admin startproject blueking
+   cd blueking
+   python manage.py startapp app01
+   ptyhon manage.py startapp app02
