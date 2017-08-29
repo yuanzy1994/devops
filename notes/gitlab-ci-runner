@@ -1,0 +1,11 @@
+#添加yum源
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.rpm.sh | sudo bash
+
+#安装
+yum install gitlab-ci-multi-runner
+
+#runner向gitlab-ci注册
+gitlab-ci-multi-runner register -n   --url http://172.16.80.210/   --registration-token yp72x6TN6G41CcYknEdH   --executor shell   --description "gitlab-ci-demo"
+
+#注册完成后运行
+gitlab-ci-multi-runner start
