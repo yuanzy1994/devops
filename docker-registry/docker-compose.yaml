@@ -3,7 +3,7 @@ services:
   create_user:
     image: "registry:2"
     volumes:
-        - /opt/auth/htpasswd:/auth/htpasswd:rw
+        - ./auth/htpasswd:/auth/htpasswd:rw
     entrypoint: htpasswd -Bb  /auth/htpasswd  admin gI2V6jngNttxKWuiT1XA
   registry:
     image: "registry:2"
@@ -12,9 +12,9 @@ services:
       - 5000:5000
     restart: always
     volumes:
-      - /opt/data:/var/lib/registry
-      - /opt/cert:/certs:ro
-      - /opt/auth:/auth:ro
+      - ./data:/var/lib/registry
+      - ./cert:/certs:ro
+      - ./auth:/auth:ro
     environment:
       - REGISTRY_AUTH=htpasswd
       - REGISTRY_AUTH_HTPASSWD_REALM=“Registry Realm”
