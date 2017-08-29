@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^home/', views.home),
     url(r'^app01/', include('app01.urls')),
     url(r'^app02/', include('app02.urls')),
-    url(r'^db_handle/', views.db_handle),
+    url(r'^app01/db_handle/', views.db_handle),
 ]

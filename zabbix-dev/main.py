@@ -143,7 +143,7 @@ class ZabbixAPI:
         data = json.dumps(
             {
                 "jsonrpc": "2.0",
-                "method": "template.get",
+                "method": "templates.get",
                 "params": {
                     "output": "extend",
                     "filter": {
