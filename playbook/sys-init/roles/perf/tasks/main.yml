@@ -1,0 +1,21 @@
+---
+- name: set selinux disable
+  copy: src=selinux_config dest=/etc/selinux/config owner=root group=root
+
+- name: stop firewalld
+  service: name=firewalld state=stopped enabled=no
+
+- name: add docker registry-mirrors
+  copy: src=docker_daemon.conf dest=/etc/docker/daemon.conf owner=root group=root
+
+- name: vim limits.conf
+  shell: echo {{ item }} >> /etc/security/limits.conf
+  with_items:
+    - * soft nofile 65535
+    - * hard nofile 65535
+
+- name: vim noproc.conf
+  shell: sed -i "s/4096/65535/g" /etc/security/limits.d/20-nproc.conf
+  notify:
+    - reboot
+

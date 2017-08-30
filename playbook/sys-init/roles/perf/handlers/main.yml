@@ -1,0 +1,5 @@
+---
+#reboot system
+
+- name: reboot
+  shell: reboot

@@ -1,0 +1,30 @@
+---
+# yum install *
+- name: add yum repo
+  copy: src={{ item }}  dest=/etc/yum.repos.d/
+  with_items:
+    - Centos-7.repo
+    - epel-7.repo
+  notify:
+    - makecache
+
+- name: install packages for system
+  yum: name={{ item }} state=installed
+  with_items:
+    - vim
+    - git
+    - psmisc
+    - net-tools
+    - docker
+    - python-pip
+    - iperf
+    - openssl
+    - wget
+    - openssl-devel
+    - pcre
+    - pcre-devel
+    - wget
+    - unzip
+    - Development Tools
+  ignore_errors: True
+

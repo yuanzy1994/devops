@@ -1,0 +1,25 @@
+---
+# This playbook to init system.
+- name: set yum repo
+  hosts: all
+  gather_facts: false
+  remote_user: yuanzy
+
+  roles:
+    - yum
+
+- name: set pip
+  hosts: all
+  gather_facts: false
+  remote_user: yuanzy
+
+  roles:
+    - pip
+
+- name: perference
+  hosts: all
+  gather_facts: false
+  remote_user: yuanzy
+
+  roles:
+    - perf
