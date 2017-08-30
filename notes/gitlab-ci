@@ -1,0 +1,97 @@
+#添加yum源
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.rpm.sh | sudo bash
+
+#安装
+yum install gitlab-ci-multi-runner
+
+#runner向gitlab-ci注册
+gitlab-ci-multi-runner register -n   --url http://172.16.80.210/   --registration-token yp72x6TN6G41CcYknEdH   --executor shell   --description "gitlab-ci-demo"
+
+#注册完成后运行
+gitlab-ci-multi-runner start
+
+
+
+# .gitlab-ci.yaml
+variables:
+    REGISTRY_URL:  XXXXX
+
+stages:
+  - build
+  - push
+  - cleanup
+
+
+project_build_on:
+    stage: build
+    only:
+        - master
+        - develop
+    tags:
+        - duiba
+    script:
+        - gradle clean
+        - gradle build -x test
+        - mv `find  ./ -name  "*.jar"  | grep -v source|grep deploy` XX.jar
+        - pwd
+        - ls -l
+    #设置stages和job间的缓存共享，并设置策略为只能pull
+    cache:
+        key: "$CI_JOB_STAGE/$CI_COMMIT_REF_NAME"
+        paths:
+        - XX.jar
+        policy: push
+    #上传jar包存档，可供下载
+    artifacts:
+        name: "$CI_COMMIT_REF_NAME"
+        paths:
+        - XX.jar
+        expire_in: 2 hours
+
+after_build_over:
+    stage: push
+    when: manual
+    script:
+        - pwd
+        - ls -lr
+        - docker build -t $REGISTRY_URL/REPO_NAME .
+        - docker login -u admin -p gI2V6jngNty8txKWuiT1XA $REGISTRY_URL
+        - docker push $REGISTRY_URL/REPO_NAME
+    #该stages不会更新缓存，所以设置缓存策略为只能push
+    cache:
+        key: "$CI_JOB_STAGE/$CI_COMMIT_REF_NAME"
+        paths:
+        - XX.jar
+        policy: pull
+    #可跳转至仓库地址查看上传情况
+    environment:
+        name: dev
+        url: https://REGISTRY_URL/v2/REPO_NAME/tags/list
+
+cleanup_job:
+    stages: cleanup
+    script:
+        - rm -rf ./*
+    when: always
+
+
+
+判断分支：
+    only，except
+
+allow_failure: true
+
+environment:
+    name: pre
+    url: 
+    on_stop
+
+#上传当前分支和阶段的存档
+job:
+  artifacts:
+    name: "${CI_JOB_STAGE}_${CI_COMMIT_REF_NAME}"
+    untracked: true
+    paths:
+    - 
+    when: on_failure/on_success/always
+    expire_in: 1 week
