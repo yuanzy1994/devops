@@ -95,3 +95,66 @@ job:
     - 
     when: on_failure/on_success/always
     expire_in: 1 week
+
+
+# EXAMPLE 
+variables:
+    TEST_REGISTRY_URL: hub.duibatest.com.cn
+    PRE_REGISTRY_URL: hub.duiba.com.cn
+
+stages:
+  - test_env
+  - pre_env
+  - cleanup
+
+push_image_to_test:
+    stage: test_env
+    only:
+        - develop
+        - master
+    tags:
+        - duiba
+    script:
+        - gradle clean
+        - gradle build -x test
+        - mv `find  ./ -name  "*.jar"  | grep -v source|grep deploy` $CI_PROJECT_NAME.jar
+        - docker build -t $TEST_REGISTRY_URL/$CI_PROJECT_NAME:$CI_PIPELINE_ID .
+        - docker login -u admin -p gI2V6jngNty8txKWuiT1XA $TEST_REGISTRY_URL
+        - docker push $TEST_REGISTRY_URL/$CI_PROJECT_NAME:$CI_PIPELINE_ID
+    artifacts:
+        name: "$CI_COMMIT_REF_NAME"
+        paths:
+        - $CI_PROJECT_NAME.jar
+        expire_in: 2 week
+    environment:
+        name: test_env
+        url: https://hub.duibatest.com.cn/v2/$CI_PROJECT_NAME/tags/list
+
+push_image_to_pre:
+    stage: pre_env
+    only:
+        - master
+    tags:
+        - duiba
+    script:
+        - gradle clean
+        - gradle build -x test
+        - mv `find  ./ -name  "*.jar"  | grep -v source|grep deploy` $CI_PROJECT_NAME.jar
+        - docker build -t $PRE_REGISTRY_URL/$CI_PROJECT_NAME:$CI_PIPELINE_ID .
+        - docker login -u admin -p gI2V6jngNty8txKWuiT1XA $PRE_REGISTRY_URL
+        - docker push $PRE_REGISTRY_URL/$CI_PROJECT_NAME:$CI_PIPELINE_ID
+    artifacts:
+        name: "$CI_COMMIT_REF_NAME"
+        paths:
+        - $CI_PROJECT_NAME.jar
+        expire_in: 1 day
+    environment:
+        name: pre_env
+        url: https://hub.duiba.com.cn/v2/$CI_PROJECT_NAME/tags/list
+    when: manual
+
+cleanup_job:
+    stage: cleanup
+    script:
+        - rm -rf ./*
+    when: always
