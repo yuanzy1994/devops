@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^app01/', include('app01.urls')),
     url(r'^app02/', include('app02.urls')),
     url(r'^app01/db_handle/', views.db_handle),
+    url(r'^date/([0-9]{4})/', views.date_time),
 ]

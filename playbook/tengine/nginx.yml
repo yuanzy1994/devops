@@ -1,0 +1,50 @@
+---
+- hosts: all 
+  gather_facts: no
+  vars:
+  become: yes
+  tasks:
+
+  - name: mkdir /opt/soft
+    file: path=/opt/soft state=directory
+
+  - name: mkdir /opt/app
+    file: path=/opt/app state=directory
+
+  - name: copy tengine.tgz to /opt/soft
+    copy: src=./soft/tengine.tgz dest=/opt/soft/ owner=root group=root
+
+  - name: add nginx user
+    user: name=nginx
+
+  - name: extract tengine.tgz to /opt/app/
+    unarchive: src=/opt/soft/tengine.tgz dest=/opt/app/ copy=no
+
+  - name: copy nginx.service to /etc/systemd/system/
+    copy: src=./soft/nginx.service dest=/etc/systemd/system/
+    notify: systemd
+
+  - name: copy vim.tgz to /opt/soft
+    copy: src=./soft/vim.tgz dest=/opt/soft owner=root group=root
+
+  - name: extract vim.tgz to /root
+    unarchive: src=/opt/soft/vim.tgz dest=/root/ copy=no
+
+  - name: set up PATH environment variables
+    lineinfile: dest=/etc/profile state=present line='{{item}}'
+    with_items:
+      - 'export PATH=/opt/app/tengine/sbin:$PATH'
+
+  - name: change tengine directory permission
+    file: path=/opt/app/tengine owner=nginx group=nginx recurse=yes
+
+  - name: start nginx server
+    service: name=nginx state=restarted
+
+  - name: enable nginx service
+    shell: systemctl enable nginx
+
+  handlers:
+    - name: systemd
+      command: systemctl daemon-reload
+

@@ -38,3 +38,7 @@ def db_handle(request):
 
     #return HttpResponse('ok')
     return render(request,'t1.html',{'li': user_list_obj})
+
+def date_time(request,year):
+    print "date_time: %s",year
+    return HttpResponse(year)
