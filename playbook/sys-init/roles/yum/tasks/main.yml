@@ -25,6 +25,8 @@
     - pcre-devel
     - wget
     - unzip
-    - Development Tools
   ignore_errors: True
+
+- name: start docker daemon
+  service: name=docker state=started enabled=yes
 

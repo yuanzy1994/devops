@@ -9,11 +9,10 @@
   copy: src=docker_daemon.conf dest=/etc/docker/daemon.conf owner=root group=root
 
 - name: vim limits.conf
-  shell: echo {{ item }} >> /etc/security/limits.conf
+  lineinfile: dest=/etc/security/limits.conf  state=present  line='{{item}}'
   with_items:
-    - * soft nofile 65535
-    - * hard nofile 65535
-
+    - "* soft nofile 65535"
+    - "* hard nofile 65535"
 - name: vim noproc.conf
   shell: sed -i "s/4096/65535/g" /etc/security/limits.d/20-nproc.conf
   notify:

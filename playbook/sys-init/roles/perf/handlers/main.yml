@@ -3,3 +3,4 @@
 
 - name: reboot
   shell: reboot
+  ignore_errors: True

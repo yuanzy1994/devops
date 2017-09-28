@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: stock-service
+  labels:
+    name: stock-service
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: stock-service
+      labels:
+        name: stock-service
+    spec:
+      restartPolicy: Always
+#      revisonHistoryLimit: 3
+      containers:
+      - name: stock-service
+        image: hub.duibatest.com.cn/stock-service:dev-225
+        ports:
+        - name: stock-service
+          containerPort: 8778
+          hostPort: 8778
+          protocol: TCP
+      imagePullSecrets:
+      - name: hubsecret
+      dnsPolicy: Default
