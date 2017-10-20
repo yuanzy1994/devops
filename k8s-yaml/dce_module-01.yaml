@@ -31,7 +31,7 @@ spec:
       containers:
         - terminationMessagePath: /dev/termination-log
           name: spring-boot-sample-spring-boot-sample
-          image: '101.37.119.140/daocloud/spring-boot-sample:latest'
+          image: '11.7.11.40/daocloud/spring-boot-sample:latest'
           terminationMessagePolicy: File
           imagePullPolicy: Always
           resources:
@@ -94,7 +94,7 @@ metadata:
 ---
 data:
   .dockercfg: >-
-    eyIxMDEuMzcuMTE5LjE0MCI6eyJhdXRoIjoiWVdSdGFXNDZaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsImVtYWlsIjoiIiwicGFzc3dvcmQiOiJaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsInVzZXJuYW1lIjoiYWRtaW4ifX0=
+    eyIxMDEuM5LjE0MCI6eyJhIjoiWVdSdGFXNDZaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsImVtYWlsIjoiIiwicGFzc3dvcmQiOiJaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsInVzZXJuYW1lIjoiYWRtaW4ifX0=
 kind: Secret
 type: kubernetes.io/dockercfg
 apiVersion: v1
