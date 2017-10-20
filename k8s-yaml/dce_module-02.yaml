@@ -1,0 +1,90 @@
+status:
+  replicas: 3
+  observedGeneration: 8
+  updatedReplicas: 3
+  availableReplicas: 3
+  readyReplicas: 3
+  conditions:
+    - status: 'True'
+      lastUpdateTime: '2017-10-10T01:43:42+00:00'
+      lastTransitionTime: '2017-10-10T01:43:42+00:00'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+      type: Available
+kind: Deployment
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 3
+  template:
+    spec:
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always
+      containers:
+        - terminationMessagePath: /dev/termination-log
+          name: ghost-ghost
+          image: 'daocloud.io/ghost:latest'
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          ports:
+            - protocol: TCP
+              containerPort: 2368
+          resources: {}
+    metadata:
+      labels:
+        app: ghost-ghost
+        io.daocloud.dce.app: ghost
+      name: ghost-ghost
+  selector:
+    matchLabels:
+      io.daocloud.dce.app: ghost
+apiVersion: extensions/v1beta1
+metadata:
+  uid: 646630da-ad5b-11e7-b730-0242c0a82003
+  generation: 8
+  labels:
+    io.daocloud.dce.template: ghost
+    app: ghost-ghost
+    io.daocloud.dce.app: ghost
+  namespace: default
+  resourceVersion: '105956'
+  creationTimestamp: '2017-10-10T01:36:09+00:00'
+  annotations:
+    deployment.kubernetes.io/revision: '5'
+    kubernetes.io/change-cause: update image
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/ghost-ghost
+  name: ghost-ghost
+
+---
+status:
+  loadBalancer: {}
+kind: Service
+spec:
+  clusterIP: 10.109.82.148
+  sessionAffinity: None
+  type: NodePort
+  ports:
+    - targetPort: '2368'
+      protocol: TCP
+      port: 2368
+      nodePort: 31938
+  selector:
+    app: ghost-ghost
+apiVersion: v1
+metadata:
+  uid: 6468e365-ad5b-11e7-b730-0242c0a82003
+  labels:
+    io.daocloud.dce.template: ghost
+    io.daocloud.dce.app: ghost
+  namespace: default
+  resourceVersion: '81544'
+  creationTimestamp: '2017-10-10T01:36:09+00:00'
+  selfLink: /api/v1/namespaces/default/services/ghost-ghost
+  name: ghost-ghost
+

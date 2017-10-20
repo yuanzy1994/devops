@@ -1,0 +1,12 @@
+# add label
+kubectl label pod POD_NAME role=backend
+
+# 查看
+kubectl get pods -Lrole
+
+# 删除label
+kubectl label pod POD_NAME role-
+
+# 修改label值
+kubectl label pod POD_NAME role=frontend --overwrite
+

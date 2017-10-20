@@ -1,0 +1,6 @@
+# Pod动态扩容
+kubectl scale rc POD_NAME --replicas=3
+
+# Pod动态缩放
+kubectl scale rc POD_NAME --replicas=1
+

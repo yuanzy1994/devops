@@ -1,0 +1,111 @@
+status:
+  replicas: 1
+  observedGeneration: 1
+  updatedReplicas: 1
+  availableReplicas: 1
+  readyReplicas: 1
+  conditions:
+    - status: 'True'
+      lastUpdateTime: '2017-10-12T03:05:30+00:00'
+      lastTransitionTime: '2017-10-12T03:05:30+00:00'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+      type: Available
+kind: Deployment
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: 1
+  template:
+    spec:
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: spring-boot-sample-spring-boot-sample-101.37.119.140
+      containers:
+        - terminationMessagePath: /dev/termination-log
+          name: spring-boot-sample-spring-boot-sample
+          image: '101.37.119.140/daocloud/spring-boot-sample:latest'
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: '0'
+            limits:
+              cpu: '2'
+              memory: '4294967296'
+    metadata:
+      labels:
+        k8s-app: spring-boot-sample-spring-boot-sample
+        io.daocloud.dce.app: spring-boot-sample
+      name: spring-boot-sample-spring-boot-sample
+  selector:
+    matchLabels:
+      io.daocloud.dce.app: spring-boot-sample
+apiVersion: extensions/v1beta1
+metadata:
+  uid: 34851da8-aefa-11e7-b730-0242c0a82003
+  generation: 1
+  labels:
+    k8s-app: spring-boot-sample-spring-boot-sample
+    io.daocloud.dce.app: spring-boot-sample
+  namespace: default
+  resourceVersion: '319547'
+  creationTimestamp: '2017-10-12T03:05:30+00:00'
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+  selfLink: >-
+    /apis/extensions/v1beta1/namespaces/default/deployments/spring-boot-sample-spring-boot-sample
+  name: spring-boot-sample-spring-boot-sample
+
+---
+status:
+  loadBalancer: {}
+kind: Service
+spec:
+  clusterIP: 10.110.123.147
+  sessionAffinity: None
+  type: NodePort
+  ports:
+    - targetPort: '8080'
+      protocol: TCP
+      port: 8080
+      name: spring-boot-sample-spring-boot-sample-8080
+      nodePort: 32228
+  selector:
+    k8s-app: spring-boot-sample-spring-boot-sample
+apiVersion: v1
+metadata:
+  uid: 3497b0de-aefa-11e7-b730-0242c0a82003
+  labels:
+    io.daocloud.dce.app: spring-boot-sample
+  namespace: default
+  resourceVersion: '319368'
+  creationTimestamp: '2017-10-12T03:05:30+00:00'
+  selfLink: /api/v1/namespaces/default/services/spring-boot-sample-spring-boot-sample
+  name: spring-boot-sample-spring-boot-sample
+
+---
+data:
+  .dockercfg: >-
+    eyIxMDEuMzcuMTE5LjE0MCI6eyJhdXRoIjoiWVdSdGFXNDZaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsImVtYWlsIjoiIiwicGFzc3dvcmQiOiJaWGxLYUdKSFkybFBhVXBKVlhwSk1VNXBTamt1WlhsS01XTXlWbmxpYlVaMFdsTkpOa2x0Um10aVYyeDFTV2wzYVdSSGJIUmFXRTR3V1ZjeGQwbHFiM2hPVkVFelRucGpNMDVVUVRSTWFtY3lUa1JWTWs1dU1DNXlZMG8zWVdjeVIwdDZRWHBET1hSd2JYTXlaM2g0TTFSRU9IZEJlbGt4VVRGV1ZWZE5RbXgxVFZjMCIsInVzZXJuYW1lIjoiYWRtaW4ifX0=
+kind: Secret
+type: kubernetes.io/dockercfg
+apiVersion: v1
+metadata:
+  uid: 34a3bd2b-aefa-11e7-b730-0242c0a82003
+  labels:
+    io.daocloud.dce.app: spring-boot-sample
+  namespace: default
+  resourceVersion: '319370'
+  creationTimestamp: '2017-10-12T03:05:30+00:00'
+  selfLink: >-
+    /api/v1/namespaces/default/secrets/spring-boot-sample-spring-boot-sample-101.37.119.140
+  name: spring-boot-sample-spring-boot-sample-101.37.119.140
+
