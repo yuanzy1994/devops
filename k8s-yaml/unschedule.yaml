@@ -1,0 +1,12 @@
+# Usage: 
+#   1.kubectl replace -f unschedulable.yaml
+#   2.kubectl patch node kubernetes-minion1 -p '{ "spec":{"unschedulable":true}}'
+
+apiVersion: v1
+kind: Node
+metadata:
+  name: 172.16.80.229
+  labels:
+    kubernetes.io/hostname: 172.16.80.229
+spec:
+  unschedulable: true
