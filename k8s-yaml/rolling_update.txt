@@ -2,3 +2,7 @@
 2. selector中应当至少有一个label与旧的label不同，以标识为新RC
 
 kubectl rolling-update POD_NAME -f  update.yaml
+
+
+# 回滚
+kubectl rolling-update --rollback
