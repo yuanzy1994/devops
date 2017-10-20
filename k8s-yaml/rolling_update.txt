@@ -1,0 +1,4 @@
+1. RC的name不能与旧的RC名字相同
+2. selector中应当至少有一个label与旧的label不同，以标识为新RC
+
+kubectl rolling-update POD_NAME -f  update.yaml
