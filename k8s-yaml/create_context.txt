@@ -1,0 +1,13 @@
+# 创建集群
+kubectl config set-cluster kubernetes-cluster --server=http://172.16.80.230:8080
+
+# 设置上下文
+kubectl config  set-context ctx-dev --namespace=development --cluster=kubernetes-cluster --user=dev
+kubectl config  set-context ctx-prod --namespace=production --cluster=kubernetes-cluster --user=prod
+
+#查看上下文
+kubectl   config  view
+ll /root/.kube/config
+
+#切换上下文
+kubectl config  use-context ctx-prod
