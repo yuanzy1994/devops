@@ -26,7 +26,7 @@ gather_facts
 
 environment
 
-changed_when    changed_fail  ---------- in, not in ...
+changed_when    changed_fail  ---------- in, not in,exists ...
 
 ignore_errors   
 
@@ -40,6 +40,17 @@ tags          标签
 
 block         块功能适用于多个任务共用同一套任务参数情况,还可以用来处理任务异常。--- (rescue,always)
 
+include       引用其他YAML文件
+
+set_fact      设置fact变量
+
+lookup 
+
+
+#善用jinja2模板
+
+
+#插件开发     filter，callback
 
 
 
