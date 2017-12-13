@@ -7,6 +7,7 @@
 
 - name: add docker registry-mirrors
   copy: src=docker_daemon.conf dest=/etc/docker/daemon.conf owner=root group=root
+  ignore_errors: True
 
 - name: vim limits.conf
   lineinfile: dest=/etc/security/limits.conf  state=present  line='{{item}}'

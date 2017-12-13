@@ -1,0 +1,60 @@
+Copy from: https://my.oschina.net/eddylinux/blog/601026
+---------------------------------------------------------
+
+Logstash output配置
+如何让数据经过logstash的解析和处理后，把结果输出来。
+
+输出到file
+以TCP/UDP方式输出
+输出到elasticsearch
+输出到file 
+把解析过滤的结果，输出到file文件里。
+
+比如放在一个txt文件里。
+output {
+       file {
+            path => "/root/access_result"
+       }
+       stdout {
+           codec => rubydebug
+       }
+}
+
+output {
+    file {
+        path => “ /path/%{+YYYY.MM.dd}-%{host}-access.gz ”
+        message_format => “ %{ip} ”
+        gzip => true
+    }
+}
+TCP/UDP方式输出
+有TCP/UDP的输入，那么必定有TCP/UDP方式输出。
+output {
+    tcp {
+        codec=>json_lines
+          host=>"127.0.0.1"
+          port=>5656
+          mode=>"server"
+    }
+}
+
+output {
+    udp {
+        host=>"127.0.0.1"
+        port=>5656
+    }
+}
+输出到elasticsearch
+Elasticsearch就是数据库
+把logstash解析过滤的结果输入到elasticsearch里
+
+方可存储以及检索！
+output {
+    elasticsearch {
+        host => “X.X.X.X“         # 或者cluster => “ClusterName“ 
+        protocol => "http"
+        index => "test_output-%{type}-%{+YYYY.MM.dd}"
+        document_type => "nginx"
+        workers => 5    
+	}
+}
