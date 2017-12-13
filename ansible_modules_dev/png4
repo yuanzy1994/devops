@@ -1,0 +1,15 @@
+#!/usr/bin/python
+
+from ansible.module_utils.basic import *
+import os
+
+module = AnsibleModule(
+	argument_spec = dict(
+	nic = dict(required=True)),
+	)
+
+nic = module.params['nic']
+os.system('ifconfig {0}'.format(nic))
+result = dict(echo=nic, changed=True, fuck='sjcsb')
+
+module.exit_json(**result)

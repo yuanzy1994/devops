@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e 
+source $1
+INF=$nic
+
+if [ ! -z "$INF" ]; then
+	id=$(/usr/sbin/ifconfig $INF)
+	if [ ! -z "$id" ]; then
+		CHANGED="True"
+		echo {\"INF_INFO\":\"$id\"}
+		exit 0
+	fi
+else
+	echo {\"msg\":\"No inspect interface\"}
+	exit 0
+fi
+
