@@ -9,7 +9,9 @@ get_url
 
 vault        加密模块
 
-wait_for     任务的暂停
+wait_for     任务的暂停    
+
+sync  poll   异步
 
 ---
 #提高效率的一些逻辑
